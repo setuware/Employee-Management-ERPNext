@@ -1,0 +1,130 @@
+# Employee Management & Leave Tracking Module
+
+Employee Management & Leave Tracking module built on ERPNext (Frappe Framework) for Bits and Volts Pvt. Ltd.
+
+## Features
+
+### Employee Management
+- Employee CRUD operations with validation
+- Employee list with search and pagination
+- Add/Edit employee form
+- Profile picture upload
+- Department linking
+
+### Leave Request Management
+- Leave request creation and management
+- Status handling (Pending, Approved, Rejected, Canceled)
+- Filter by status
+- Search functionality
+- Pagination support
+
+### Summary Report
+- Real-time leave statistics
+- Total, Approved, Pending, Canceled leaves count
+- CSV export functionality
+
+### Backend Features
+- RESTful API endpoints
+- Role-based permissions
+- Data validation
+- Error handling
+- Search and pagination
+- CSV export
+
+## Installation
+
+### Prerequisites
+- ERPNext installed and running
+- Bench CLI installed
+- Python 3.6+
+- Node.js 14+
+
+### Steps
+
+1. **Install the app:**
+```bash
+cd frappe-bench
+bench get-app https://github.com/bitsandvolts/lms.git
+bench install-app lms
+bench migrate
+```
+
+2. **Start the server:**
+```bash
+bench start
+```
+
+3. **Access the application:**
+   - Navigate to: `http://localhost:8000/employee-list`
+   - Or use the desktop icon "Employee Management & Leave Tracking"
+
+## Setup
+
+1. **Create Departments:**
+   - Go to: HR > Department
+   - Create departments (HR, IT, Sales, etc.)
+
+2. **Create Users:**
+   - System Manager: Full access (default administrator)
+   - HR Manager: Can manage employees and approve leaves
+   - Employee: Can view own data and create leave requests
+
+## Test Credentials
+
+- **Username:** `administrator`
+- **Password:** (set during ERPNext site creation)
+
+## API Endpoints
+
+### Employee APIs
+- `GET /api/method/lms.api.employee.get_employees` - List employees (with pagination & search)
+- `POST /api/method/lms.api.employee.create_employee` - Create employee
+- `PUT /api/method/lms.api.employee.update_employee` - Update employee
+- `GET /api/method/lms.api.employee.get_employee` - Get single employee
+- `DELETE /api/method/lms.api.employee.delete_employee` - Delete employee
+
+### Leave Request APIs
+- `GET /api/method/lms.api.leave_request.get_leave_requests` - List leave requests (with pagination, search & filter)
+- `POST /api/method/lms.api.leave_request.create_leave_request` - Create leave request
+- `PUT /api/method/lms.api.leave_request.update_leave_request` - Update leave request
+- `GET /api/method/lms.api.leave_request.get_leave_request` - Get single leave request
+- `GET /api/method/lms.api.leave_request.get_summary` - Get summary statistics
+- `GET /api/method/lms.api.leave_request.export_csv` - Export CSV
+
+See `API_DOCUMENTATION.md` for detailed API documentation.
+
+## DocTypes
+
+### Employee
+- **Fields:** Employee ID, Profile Picture, Full Name, Email, Department, Joining Date
+- **Validations:** Unique Employee ID, Email format, Date format
+
+### Leave Request
+- **Fields:** Leave ID (auto-generated), Employee, Leave Type, From Date, To Date, Status
+- **Validations:** Date range validation, Employee existence, Status validation
+
+## Documentation
+
+- `README.md` - This file
+- `INSTALLATION.md` - Detailed installation guide
+- `API_DOCUMENTATION.md` - Complete API reference
+- `TESTING.md` - Testing guide and scenarios
+- `PROJECT_SUMMARY.md` - Project overview and structure
+
+## Permissions
+
+- **System Manager:** Full access to all features
+- **HR Manager:** Can manage employees and approve/reject leave requests
+- **Employee:** Can view own data and create leave requests
+
+## Technology Stack
+
+- **Backend:** Python, Frappe Framework
+- **Frontend:** JavaScript, HTML, CSS
+- **Database:** MariaDB (via Frappe)
+- **Framework:** ERPNext
+
+## Support
+
+For issues or questions, refer to the documentation files or contact Bits and Volts Pvt. Ltd.
+# Employee-Management-ERPNext
