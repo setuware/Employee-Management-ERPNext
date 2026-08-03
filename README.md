@@ -31,6 +31,24 @@ Employee Management & Leave Tracking module built on ERPNext (Frappe Framework) 
 - Search and pagination
 - CSV export
 
+### Attendance Tracking
+- Employee check-in / check-out from the self-service portal
+- Automatic work-hours calculation (based on a 10:00 AM – 5:00 PM workday)
+- Auto status: Present, Late, Early Leave, Half Day
+- Admin attendance log with filters and manual record entry
+- Daily summary (checked-in, absent, total hours)
+
+### Task Management
+- Task assignment with priority, due date and estimated hours
+- Status workflow: Not Started → In Progress → Completed / Cancelled
+- Per-task timer (start / stop) with elapsed and total tracked time
+- Employees time-track their own assigned tasks from the portal
+- Admin task board with status updates and timer controls
+
+### Company Website (Setuware)
+- Public marketing pages: Home, Services, How We Work, Contact
+- Employee & admin portals integrated into the same app
+
 ## Installation
 
 ### Prerequisites

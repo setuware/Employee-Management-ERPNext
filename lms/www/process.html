@@ -1,0 +1,58 @@
+{% extends "templates/web.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block page_content %}
+<div class="sw-site">
+	<section class="sw-hero sw-hero-small">
+		<div class="sw-container">
+			<h1>How We Work</h1>
+			<p class="sw-hero-sub">We bridge business ideas and working digital products with a clear, proven process.</p>
+		</div>
+	</section>
+
+	<section class="sw-section sw-section-light">
+		<div class="sw-container">
+			<div class="sw-steps sw-steps-vertical">
+				<div class="sw-step sw-step-lg">
+					<span class="sw-step-num">01</span>
+					<h4>Discovery &amp; Planning</h4>
+					<p>We start by understanding your business, your users and your constraints. This phase produces a clear scope, technology recommendations and a delivery roadmap — so there are no surprises later.</p>
+				</div>
+				<div class="sw-step sw-step-lg">
+					<span class="sw-step-num">02</span>
+					<h4>Design &amp; Architecture</h4>
+					<p>We design the user experience, data model and system architecture. For enterprise builds we follow ERPNext and Frappe conventions, keeping the foundation standard so your system stays upgradable.</p>
+				</div>
+				<div class="sw-step sw-step-lg">
+					<span class="sw-step-num">03</span>
+					<h4>Development Sprints</h4>
+					<p>Development happens in short agile sprints with regular demos. You see working software early and often, and feedback gets incorporated continuously rather than at the end.</p>
+				</div>
+				<div class="sw-step sw-step-lg">
+					<span class="sw-step-num">04</span>
+					<h4>Testing &amp; QA</h4>
+					<p>Every feature is tested — functional, edge-case and security testing — before it reaches production. We treat your system's reliability as our own reputation.</p>
+				</div>
+				<div class="sw-step sw-step-lg">
+					<span class="sw-step-num">05</span>
+					<h4>Deployment</h4>
+					<p>We deploy on AWS or your infrastructure of choice, with CI/CD, backups, monitoring and rollback plans in place.</p>
+				</div>
+				<div class="sw-step sw-step-lg">
+					<span class="sw-step-num">06</span>
+					<h4>Support &amp; Evolution</h4>
+					<p>A product is never finished. We provide ongoing maintenance, new features and continuous improvement long after launch.</p>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section class="sw-section sw-section-dark">
+		<div class="sw-container sw-center">
+			<h2 class="sw-section-title">Have a project in mind?</h2>
+			<a class="sw-btn sw-btn-light" href="/contact">Start the Conversation</a>
+		</div>
+	</section>
+</div>
+{% endblock %}

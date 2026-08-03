@@ -1,0 +1,130 @@
+{% extends "templates/web.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block page_content %}
+<div class="lms-container">
+	<div class="sw-nav">
+		<a href="/" class="sw-nav-brand">Setuware</a>
+		<div class="sw-nav-links">
+			<a href="/employee-portal">My Portal</a>
+			<a href="/employee-list">Admin Dashboard</a>
+			<a href="/attendance-log">Attendance Log</a>
+			<a href="/tasks">Tasks</a>
+			<a href="/contact">Contact</a>
+		</div>
+	</div>
+
+	<div class="page-header">
+		<h1>Attendance Log</h1>
+		<p class="page-sub">Review check-in/check-out records and manually record attendance.</p>
+	</div>
+
+	<div class="grid-2-col">
+		<div class="panel-container">
+			<div class="panel-header"><h2>Filters</h2></div>
+			<div class="panel-body">
+				<div class="filter-row">
+					<label>Date</label>
+					<input type="date" id="filter-date">
+				</div>
+				<div class="filter-row">
+					<label>Employee</label>
+					<select id="filter-employee"><option value="">All Employees</option></select>
+				</div>
+				<div class="filter-row">
+					<label>Status</label>
+					<select id="filter-status">
+						<option value="">All Statuses</option>
+						<option>Present</option>
+						<option>Absent</option>
+						<option>Late</option>
+						<option>Early Leave</option>
+						<option>Half Day</option>
+						<option>On Leave</option>
+					</select>
+				</div>
+				<button class="sw-btn sw-btn-primary" onclick="loadLog(1)">Apply Filters</button>
+			</div>
+		</div>
+
+		<div class="panel-container">
+			<div class="panel-header"><h2>Today's Summary</h2></div>
+			<div class="panel-body">
+				<div class="summary-grid" id="summary-cards">
+					<div class="summary-card"><span class="summary-num" id="sum-total">-</span><span class="summary-label">Employees</span></div>
+					<div class="summary-card"><span class="summary-num" id="sum-in">-</span><span class="summary-label">Checked In</span></div>
+					<div class="summary-card"><span class="summary-num" id="sum-absent">-</span><span class="summary-label">Absent</span></div>
+					<div class="summary-card"><span class="summary-num" id="sum-hours">-</span><span class="summary-label">Total Hours</span></div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="panel-container" style="margin-top: 24px;">
+		<div class="panel-header"><h2>Record Attendance Manually</h2></div>
+		<div class="panel-body">
+			<div class="form-grid">
+				<div class="filter-row">
+					<label>Employee</label>
+					<select id="record-employee"></select>
+				</div>
+				<div class="filter-row">
+					<label>Date</label>
+					<input type="date" id="record-date">
+				</div>
+				<div class="filter-row">
+					<label>Check In</label>
+					<input type="datetime-local" id="record-check-in">
+				</div>
+				<div class="filter-row">
+					<label>Check Out</label>
+					<input type="datetime-local" id="record-check-out">
+				</div>
+				<div class="filter-row">
+					<label>Status</label>
+					<select id="record-status">
+						<option>Present</option>
+						<option>Absent</option>
+						<option>Late</option>
+						<option>Early Leave</option>
+						<option>Half Day</option>
+						<option>On Leave</option>
+					</select>
+				</div>
+				<div class="filter-row">
+					<label>Notes</label>
+					<input type="text" id="record-notes">
+				</div>
+				<button class="sw-btn sw-btn-primary" onclick="recordAttendance()">Save Record</button>
+			</div>
+		</div>
+	</div>
+
+	<div class="panel-container" style="margin-top: 24px;">
+		<div class="panel-header"><h2>Records</h2></div>
+		<div class="panel-body">
+			<div class="table-container">
+				<table class="data-table">
+					<thead>
+						<tr>
+							<th>Date</th>
+							<th>Employee</th>
+							<th>Check In</th>
+							<th>Check Out</th>
+							<th>Hours</th>
+							<th>Status</th>
+							<th>Source</th>
+							<th>Actions</th>
+						</tr>
+					</thead>
+					<tbody id="log-tbody"></tbody>
+				</table>
+			</div>
+			<div class="pagination-row" id="log-pagination"></div>
+		</div>
+	</div>
+</div>
+
+<script src="/assets/lms/js/attendance_log.js"></script>
+{% endblock %}

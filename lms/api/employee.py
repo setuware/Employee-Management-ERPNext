@@ -56,6 +56,7 @@ def create_employee(data):
 			"profile_picture": data.get("profile_picture"),
 			"full_name": data.get("full_name"),
 			"email": data.get("email"),
+			"user": data.get("user"),
 			"department": data.get("department"),
 			"joining_date": data.get("joining_date")
 		})
@@ -90,6 +91,8 @@ def update_employee(name, data):
 			doc.full_name = data["full_name"]
 		if "email" in data:
 			doc.email = data["email"]
+		if "user" in data:
+			doc.user = data["user"]
 		if "department" in data:
 			doc.department = data["department"]
 		if "joining_date" in data:
@@ -132,4 +135,54 @@ def delete_employee(name):
 		}
 	except Exception as e:
 		frappe.log_error(frappe.get_traceback(), "Delete Employee Error")
+		return {"success": False, "message": str(e)}
+
+
+def get_employee_for_user(user=None):
+	if not user:
+		user = frappe.session.user
+	if user == "Administrator":
+		return None
+	return frappe.db.get_value("LMS Employee", {"user": user})
+
+
+@frappe.whitelist()
+def get_my_profile():
+	try:
+		emp_name = get_employee_for_user()
+		if not emp_name:
+			return {
+				"success": False,
+				"message": "No LMS Employee record linked to your account. Contact your administrator."
+			}
+
+		doc = frappe.get_doc("LMS Employee", emp_name)
+		return {
+			"success": True,
+			"data": {
+				"name": doc.name,
+				"employee_id": doc.employee_id,
+				"full_name": doc.full_name,
+				"email": doc.email,
+				"profile_picture": doc.profile_picture,
+				"department": doc.department,
+				"joining_date": doc.joining_date
+			}
+		}
+	except Exception as e:
+		frappe.log_error(frappe.get_traceback(), "Get My Profile Error")
+		return {"success": False, "message": str(e)}
+
+
+@frappe.whitelist()
+def get_employees_options():
+	try:
+		employees = frappe.get_all(
+			"LMS Employee",
+			fields=["name", "employee_id", "full_name"],
+			order_by="full_name asc"
+		)
+		return {"success": True, "data": employees}
+	except Exception as e:
+		frappe.log_error(frappe.get_traceback(), "Get Employees Options Error")
 		return {"success": False, "message": str(e)}

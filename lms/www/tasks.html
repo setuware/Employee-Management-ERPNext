@@ -1,0 +1,111 @@
+{% extends "templates/web.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block page_content %}
+<div class="lms-container">
+	<div class="sw-nav">
+		<a href="/" class="sw-nav-brand">Setuware</a>
+		<div class="sw-nav-links">
+			<a href="/employee-portal">My Portal</a>
+			<a href="/employee-list">Admin Dashboard</a>
+			<a href="/attendance-log">Attendance Log</a>
+			<a href="/tasks">Tasks</a>
+			<a href="/contact">Contact</a>
+		</div>
+	</div>
+
+	<div class="page-header">
+		<h1>Task Management</h1>
+		<p class="page-sub">Assign tasks to employees, track progress and monitor timers.</p>
+	</div>
+
+	<div class="grid-2-col">
+		<div class="panel-container">
+			<div class="panel-header"><h2>Assign New Task</h2></div>
+			<div class="panel-body">
+				<div class="form-grid">
+					<div class="filter-row">
+						<label>Title *</label>
+						<input type="text" id="task-title" placeholder="Task title">
+					</div>
+					<div class="filter-row">
+						<label>Description</label>
+						<textarea id="task-description" rows="3" placeholder="What needs to be done?"></textarea>
+					</div>
+					<div class="filter-row">
+						<label>Assign To</label>
+						<select id="task-assignee"></select>
+					</div>
+					<div class="filter-row">
+						<label>Priority</label>
+						<select id="task-priority">
+							<option>Low</option>
+							<option selected>Medium</option>
+							<option>High</option>
+							<option>Urgent</option>
+						</select>
+					</div>
+					<div class="filter-row">
+						<label>Due Date</label>
+						<input type="date" id="task-due">
+					</div>
+					<div class="filter-row">
+						<label>Estimated Hours</label>
+						<input type="number" id="task-est-hours" step="0.5" min="0">
+					</div>
+					<button class="sw-btn sw-btn-primary" onclick="createTask()">Create Task</button>
+				</div>
+			</div>
+		</div>
+
+		<div class="panel-container">
+			<div class="panel-header"><h2>Task Summary</h2></div>
+			<div class="panel-body">
+				<div class="summary-grid">
+					<div class="summary-card"><span class="summary-num" id="sum-total">-</span><span class="summary-label">Total Tasks</span></div>
+					<div class="summary-card"><span class="summary-num" id="sum-progress">-</span><span class="summary-label">In Progress</span></div>
+					<div class="summary-card"><span class="summary-num" id="sum-completed">-</span><span class="summary-label">Completed</span></div>
+					<div class="summary-card"><span class="summary-num" id="sum-hours">-</span><span class="summary-label">Tracked Hours</span></div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="panel-container" style="margin-top: 24px;">
+		<div class="panel-header"><h2>Tasks</h2></div>
+		<div class="panel-body">
+			<div class="filter-row">
+				<label>Status</label>
+				<select id="task-filter-status" onchange="loadTasks(1)">
+					<option value="">All Statuses</option>
+					<option>Not Started</option>
+					<option>In Progress</option>
+					<option>Completed</option>
+					<option>Cancelled</option>
+				</select>
+			</div>
+			<div class="table-container">
+				<table class="data-table">
+					<thead>
+						<tr>
+							<th>Task</th>
+							<th>Assigned To</th>
+							<th>Priority</th>
+							<th>Status</th>
+							<th>Due</th>
+							<th>Time (Hrs)</th>
+							<th>Timer</th>
+							<th>Actions</th>
+						</tr>
+					</thead>
+					<tbody id="tasks-tbody"></tbody>
+				</table>
+			</div>
+			<div class="pagination-row" id="tasks-pagination"></div>
+		</div>
+	</div>
+</div>
+
+<script src="/assets/lms/js/tasks.js"></script>
+{% endblock %}

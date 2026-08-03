@@ -55,9 +55,15 @@ bench start
    - URL: http://localhost:8000
    - Login with administrator credentials
 
-3. Navigate to Employee Management:
-   - Go to: http://localhost:8000/employee-list
-   - Or use the desktop icon "Employee Management & Leave Tracking"
+3. Navigate to the application pages:
+   - `/` - Company website (Home)
+   - `/services` - Services
+   - `/process` - How we work
+   - `/contact` - Contact
+   - `/employee-portal` - Employee self-service (check-in/out, attendance history, tasks & timers)
+   - `/attendance-log` - Admin attendance log
+   - `/tasks` - Admin task management
+   - `/employee-list` - Employee & leave management dashboard
 
 ## Setup Department
 
@@ -90,6 +96,8 @@ Default ERPNext installation creates:
 2. Create new user
 3. Assign role: Employee
 4. Can view own data and create leave requests
+
+> **Important for the portal:** open the employee's record (LMS Employee) and set the **User** field to their login — the portal (`/employee-portal`) uses this link for check-in/check-out and shows only that employee's data.
 
 ## API Testing
 

@@ -1,0 +1,38 @@
+{% extends "templates/web.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block page_content %}
+<div class="sw-site">
+	<section class="sw-hero sw-hero-small">
+		<div class="sw-container">
+			<h1>Contact Us</h1>
+			<p class="sw-hero-sub">Let's build something great together.</p>
+		</div>
+	</section>
+
+	<section class="sw-section sw-section-light">
+		<div class="sw-container">
+			<div class="sw-grid sw-grid-2">
+				<div class="sw-card sw-card-lg">
+					<h3>Get in Touch</h3>
+					<p>Tell us about your idea, project or partnership. We typically respond within one business day.</p>
+					<ul class="sw-contact-list">
+						<li><strong>Email:</strong> <a href="mailto:hr@setuware.in">hr@setuware.in</a></li>
+						<li><strong>Careers:</strong> <a href="mailto:hr@setuware.in">hr@setuware.in</a></li>
+						<li><strong>Location:</strong> Gurugram, Haryana, India (Remote-friendly)</li>
+					</ul>
+				</div>
+				<div class="sw-card sw-card-lg">
+					<h3>What Happens Next</h3>
+					<div class="sw-steps sw-steps-vertical">
+						<div class="sw-step"><span class="sw-step-num">01</span><h4>We reply</h4><p>We respond to your message within a business day.</p></div>
+						<div class="sw-step"><span class="sw-step-num">02</span><h4>We listen</h4><p>A short call or meeting to understand your goals.</p></div>
+						<div class="sw-step"><span class="sw-step-num">03</span><h4>We propose</h4><p>Scope, timeline and budget — clear and honest.</p></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+</div>
+{% endblock %}

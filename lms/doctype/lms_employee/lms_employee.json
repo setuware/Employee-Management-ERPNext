@@ -10,6 +10,7 @@
   "profile_picture",
   "full_name",
   "email",
+  "user",
   "department",
   "joining_date"
  ],
@@ -41,6 +42,12 @@
    "label": "Email",
    "options": "Email",
    "reqd": 1
+  },
+  {
+   "fieldname": "user",
+   "fieldtype": "Link",
+   "label": "User",
+   "options": "User"
   },
   {
    "fieldname": "department",

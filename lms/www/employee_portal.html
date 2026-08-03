@@ -1,0 +1,119 @@
+{% extends "templates/web.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block page_content %}
+<div class="lms-container">
+	<div class="sw-nav">
+		<a href="/" class="sw-nav-brand">Setuware</a>
+		<div class="sw-nav-links">
+			<a href="/employee-portal">My Portal</a>
+			<a href="/employee-list">Admin Dashboard</a>
+			<a href="/attendance-log">Attendance Log</a>
+			<a href="/tasks">Tasks</a>
+			<a href="/contact">Contact</a>
+		</div>
+	</div>
+
+	<div class="page-header">
+		<h1 id="portal-name">My Portal</h1>
+		<p id="portal-sub" class="page-sub">Employee self-service — attendance, check-in/out and tasks.</p>
+	</div>
+
+	<div id="no-employee-warning" class="lms-alert lms-alert-warning" style="display:none">
+		No LMS Employee record is linked to your account. Ask your administrator to set the <strong>User</strong> field on your employee record.
+	</div>
+
+	<div class="grid-2-col">
+		<div class="panel-container">
+			<div class="panel-header">
+				<h2>Today's Attendance</h2>
+			</div>
+			<div class="panel-body center">
+				<div id="att-status" class="att-status">Loading...</div>
+				<div class="att-times">
+					<div class="att-time-box">
+						<span class="att-label">Check In</span>
+						<span id="att-check-in" class="att-value">--:--</span>
+					</div>
+					<div class="att-time-box">
+						<span class="att-label">Check Out</span>
+						<span id="att-check-out" class="att-value">--:--</span>
+					</div>
+					<div class="att-time-box">
+						<span class="att-label">Work Hours</span>
+						<span id="att-work-hours" class="att-value">0.00</span>
+					</div>
+				</div>
+				<div class="att-actions">
+					<button id="btn-check-in" class="sw-btn sw-btn-primary" onclick="doCheckIn()" style="display:none">Check In</button>
+					<button id="btn-check-out" class="sw-btn sw-btn-danger" onclick="doCheckOut()" style="display:none">Check Out</button>
+				</div>
+			</div>
+		</div>
+
+		<div class="panel-container">
+			<div class="panel-header">
+				<h2>My Summary</h2>
+			</div>
+			<div class="panel-body">
+				<div class="summary-grid">
+					<div class="summary-card"><span id="sum-present" class="summary-num">0</span><span class="summary-label">Days Present (Month)</span></div>
+					<div class="summary-card"><span id="sum-hours" class="summary-num">0</span><span class="summary-label">Total Hours</span></div>
+					<div class="summary-card"><span id="sum-late" class="summary-num">0</span><span class="summary-label">Late Days</span></div>
+					<div class="summary-card"><span id="sum-tasks" class="summary-num">0</span><span class="summary-label">Open Tasks</span></div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="panel-container" style="margin-top: 24px;">
+		<div class="panel-header">
+			<h2>My Tasks &amp; Timers</h2>
+		</div>
+		<div class="panel-body">
+			<div id="my-tasks-empty" class="lms-empty" style="display:none">No tasks assigned to you yet.</div>
+			<div class="table-container">
+				<table class="data-table" id="my-tasks-table" style="display:none">
+					<thead>
+						<tr>
+							<th>Task</th>
+							<th>Priority</th>
+							<th>Status</th>
+							<th>Due</th>
+							<th>Time (Hrs)</th>
+							<th>Timer</th>
+						</tr>
+					</thead>
+					<tbody id="my-tasks-tbody"></tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+
+	<div class="panel-container" style="margin-top: 24px;">
+		<div class="panel-header">
+			<h2>Attendance History</h2>
+		</div>
+		<div class="panel-body">
+			<div class="table-container">
+				<table class="data-table">
+					<thead>
+						<tr>
+							<th>Date</th>
+							<th>Check In</th>
+							<th>Check Out</th>
+							<th>Hours</th>
+							<th>Status</th>
+							<th>Notes</th>
+						</tr>
+					</thead>
+					<tbody id="attendance-history-tbody"></tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script src="/assets/lms/js/employee_portal.js"></script>
+{% endblock %}
