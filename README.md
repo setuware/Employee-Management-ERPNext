@@ -130,6 +130,7 @@ See `API_DOCUMENTATION.md` for detailed API documentation.
 
 - `README.md` - This file
 - `INSTALLATION.md` - Detailed installation guide
+- `DEPLOYMENT.md` - Auto-deployment via GitHub Actions (push to deploy)
 - `API_DOCUMENTATION.md` - Complete API reference
 - `TESTING.md` - Testing guide and scenarios
 - `PROJECT_SUMMARY.md` - Project overview and structure

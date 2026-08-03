@@ -1,0 +1,42 @@
+name: Auto Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Copy deploy script to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          port: ${{ secrets.SSH_PORT }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          source: "scripts/deploy.sh"
+          target: "~/lms-deploy"
+
+      - name: Run deployment on server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          port: ${{ secrets.SSH_PORT }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script_timeout: 20m
+          envs: BENCH_PATH,SITE_NAME
+          script: |
+            chmod +x ~/lms-deploy/scripts/deploy.sh
+            ~/lms-deploy/scripts/deploy.sh "$BENCH_PATH" "$SITE_NAME"
+        env:
+          BENCH_PATH: ${{ secrets.BENCH_PATH }}
+          SITE_NAME: ${{ secrets.SITE_NAME }}
