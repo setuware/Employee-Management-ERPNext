@@ -14,6 +14,10 @@ app_include_css = [
 	"/assets/lms/css/lms.css"
 ]
 
+web_include_css = [
+	"/assets/lms/css/lms.css"
+]
+
 boot_session = "lms.boot.boot_session"
 
 app_license = "MIT"

@@ -40,6 +40,7 @@ deploy_inside() {
 
 	log "Running bench migrate"
 	bench "${SITE_ARGS[@]}" migrate
+	bench build --app lms
 	bench "${SITE_ARGS[@]}" clear-cache || true
 	bench "${SITE_ARGS[@]}" clear-website-cache || true
 	log "Done. Deployed commit $DEPLOYED_SHA"
