@@ -1,5 +1,5 @@
-source_link = "https://github.com/bitsandvolts/lms"
-docs_base_url = "https://github.com/bitsandvolts/lms"
+source_link = "https://github.com/setuware/Employee-Management-ERPNext"
+docs_base_url = "https://github.com/setuware/Employee-Management-ERPNext"
 headline = "Employee Management & Leave Tracking"
 sub_heading = "Manage employees and track leave requests"
 long_description = """Employee Management & Leave Tracking module for ERPNext.
