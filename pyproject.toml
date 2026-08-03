@@ -4,7 +4,6 @@ authors = [{ name = "Setuware Technologies" }]
 description = "Employee management app (attendance, leave, tasks) for Setuware Technologies"
 requires-python = ">=3.10"
 keywords = ["frappe", "erpnext", "lms", "employee"]
-dependencies = ["frappe"]
 version = "0.0.1"
 readme = "README.md"
 license = { text = "MIT" }
