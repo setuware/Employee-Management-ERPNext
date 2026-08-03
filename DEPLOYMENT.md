@@ -1,88 +1,91 @@
 # Auto Deployment (GitHub Actions)
 
 Every push to the `main` branch automatically deploys the app to your server:
-pull the latest code in `apps/lms`, run `bench migrate` inside the backend
-Docker container, and restart the containers.
+pull the latest code in `apps/lms`, run `bench migrate` inside the Docker
+container, and clear caches.
+
+## Server topology (current)
+
+- One Docker container runs the whole bench: `/workspace/frappe15-bench`
+  (Frappe 15, dev server on port 8000). Find its ID with `docker ps`.
+- The bench path does **not** exist on the host — everything runs inside the
+  container as user `frappe`.
+- `scripts/deploy.sh` detects this automatically:
+  - if `$BENCH_PATH/apps` exists on the host → runs directly
+  - otherwise → finds the bench container (`docker ps -qf "name=<pattern>"`,
+    falling back to names `bench`, `frappe`, `backend`, `web`, `worker`) and
+    runs the deploy **inside** it via `docker cp` + `docker exec`
 
 ## How it works
 
 1. You push to `main` on GitHub
 2. GitHub Actions connects to your server over SSH
-3. `scripts/deploy.sh` runs on the server:
+3. `scripts/deploy.sh` runs:
    - `git fetch` + `git reset --hard origin/main` in `apps/lms`
-   - `bench --site <site> migrate` inside the backend container
-   - `bench --site <site> clear-cache`
-   - restarts `frontend`, `backend`, `worker`, `scheduler` containers
-   - falls back to running bench directly on the host if no Docker container is found
+   - `bench --site <site> migrate` inside the container
+   - `bench --site <site> clear-cache` / `clear-website-cache`
 
 ## One-time setup
 
 ### 1. Let the server read the private repo
 
-The server's `apps/lms` checkout must be able to `git fetch` from GitHub.
-Easiest: a read-only **deploy key**.
+The container's git (running as `frappe`) must be able to fetch from GitHub.
+Use a read-only **deploy key** and put it **inside the container**.
 
-1. On your computer (or the server), generate a key pair:
+1. Generate a key pair on the server host:
    ```bash
    ssh-keygen -t ed25519 -f github_deploy_key -N "" -C "lms-server-deploy"
    ```
 2. GitHub → repo → **Settings → Deploy keys → Add deploy key**
-   - Paste the **public** key (`github_deploy_key.pub`), tick **Allow write access** (needed only if you want the server to push; read access is enough to deploy)
-3. On the server, save the **private** key and configure git to use it for this repo:
+   - Paste the **public** key (`github_deploy_key.pub`), read access is enough
+3. Copy the key into the container and tell git to use it:
    ```bash
-   mkdir -p ~/.ssh && chmod 700 ~/.ssh
-   # paste github_deploy_key content into ~/.ssh/github_deploy_key
-   chmod 600 ~/.ssh/github_deploy_key
-   git -C /workspace/frappe15-bench/apps/lms remote set-url origin "git@github.com:setuware/Employee-Management-ERPNext.git"
-   echo "Host github.com
+   CONTAINER=$(docker ps -qf name=bench | head -1)   # or your container name
+   docker cp ~/.ssh/github_deploy_key $CONTAINER:/home/frappe/.ssh/github_deploy_key
+   docker exec $CONTAINER bash -c "chown frappe:frappe /home/frappe/.ssh/github_deploy_key && chmod 600 /home/frappe/.ssh/github_deploy_key"
+   docker exec $CONTAINER bash -c "echo 'Host github.com
      User git
-     IdentityFile ~/.ssh/github_deploy_key
-     StrictHostKeyChecking accept-new" >> ~/.ssh/config
-   git -C /workspace/frappe15-bench/apps/lms fetch   # test — should succeed without a password
+     IdentityFile /home/frappe/.ssh/github_deploy_key
+     StrictHostKeyChecking accept-new' > /home/frappe/.ssh/config && chown frappe:frappe /home/frappe/.ssh/config"
+   docker exec -u frappe $CONTAINER ssh -T git@github.com   # test: should say "Hi setuware/Employee-Management-ERPNext!"
    ```
-
-> If you prefer, you can instead leave the HTTPS remote and configure a
-> credential helper with a personal access token on the server.
+4. Clone the app (folder name **must** be `lms`):
+   ```bash
+   docker exec -u frappe $CONTAINER bash -c "cd /workspace/frappe15-bench/apps && git clone git@github.com:setuware/Employee-Management-ERPNext.git lms"
+   ```
 
 ### 2. Allow GitHub Actions to SSH into the server
 
-The GitHub workflow connects with its own SSH key.
+The workflow connects with its own SSH key to the **host** user (`ubuntu`).
 
-1. Generate another key pair (private key stays in GitHub; public key goes on the server):
+1. Generate a key pair (private key goes to GitHub; public key on the server):
    ```bash
    ssh-keygen -t ed25519 -f actions_deploy_key -N "" -C "github-actions-deploy"
    ```
-2. Add the **public** key to the server's `~/.ssh/authorized_keys` (create it if missing):
-   ```bash
-   mkdir -p ~/.ssh && chmod 700 ~/.ssh
-   echo "ssh-ed25519 AAAA... github-actions-deploy" >> ~/.ssh/authorized_keys
-   chmod 600 ~/.ssh/authorized_keys
-   ```
-3. Make sure SSH is reachable from the internet (port 22 open). Note: GitHub
-   Actions connects from dynamic IP addresses, so you cannot restrict by IP
-   unless you use GitHub's `api.github.com/meta` IP ranges.
+2. Add the **public** key to the host's `~/.ssh/authorized_keys`
+3. Make sure SSH port 22 is reachable from the internet
 
 ### 3. Add the GitHub Actions secrets
 
 Repo → **Settings → Secrets and variables → Actions → New repository secret**:
 
-| Secret       | Value                                                          |
-|--------------|----------------------------------------------------------------|
-| `SSH_HOST`   | Server IP or domain (e.g. `203.0.113.10` or `server.setuware.in`) |
-| `SSH_PORT`   | SSH port (default `22`)                                        |
-| `SSH_USER`   | Server user, e.g. `frappe`                                     |
-| `SSH_KEY`    | The **private** key (`actions_deploy_key`) — full content including `-----BEGIN OPENSSH PRIVATE KEY-----` |
-| `BENCH_PATH` | Bench path on the server, e.g. `/workspace/frappe15-bench`     |
-| `SITE_NAME`  | Site to migrate, e.g. `site1.local` — leave empty to migrate all sites |
+| Secret              | Value                                            |
+|---------------------|--------------------------------------------------|
+| `SSH_HOST`          | Server IP or domain                              |
+| `SSH_PORT`          | SSH port (default `22`)                          |
+| `SSH_USER`          | Host user, e.g. `ubuntu` (NOT `frappe`)          |
+| `SSH_KEY`           | Private `actions_deploy_key` (full content)      |
+| `BENCH_PATH`        | `/workspace/frappe15-bench`                      |
+| `SITE_NAME`         | `erp.setuware.in`                                |
+| `CONTAINER_PATTERN` | Container name/pattern if it's not `bench`/`frappe`/`backend` (optional) |
 
 ## Test it
 
-1. Open the repo on GitHub → **Actions** → **Auto Deploy** → **Run workflow**
-   (manual trigger) — no code change needed.
-2. Or just push anything to `main` and watch the "Auto Deploy" run.
+1. Repo → **Actions** → **Auto Deploy** → **Run workflow** (manual trigger), or
+2. Push anything to `main`.
 
 ## Adjusting the deploy steps
 
-Everything that runs on the server lives in `scripts/deploy.sh` — edit it, and
-the workflow picks up the changes automatically (it copies the script before
-running it). The workflow file itself is `.github/workflows/deploy.yml`.
+Everything that runs on the server lives in `scripts/deploy.sh` — the workflow
+copies it before running, so edits are picked up automatically. The workflow
+file itself is `.github/workflows/deploy.yml`.

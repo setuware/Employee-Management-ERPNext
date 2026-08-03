@@ -33,10 +33,11 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           script_timeout: 20m
-          envs: BENCH_PATH,SITE_NAME
+          envs: BENCH_PATH,SITE_NAME,CONTAINER_PATTERN
           script: |
             chmod +x ~/lms-deploy/scripts/deploy.sh
-            ~/lms-deploy/scripts/deploy.sh "$BENCH_PATH" "$SITE_NAME"
+            ~/lms-deploy/scripts/deploy.sh "$BENCH_PATH" "$SITE_NAME" "$CONTAINER_PATTERN"
         env:
           BENCH_PATH: ${{ secrets.BENCH_PATH }}
           SITE_NAME: ${{ secrets.SITE_NAME }}
+          CONTAINER_PATTERN: ${{ secrets.CONTAINER_PATTERN }}
