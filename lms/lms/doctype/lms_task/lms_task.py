@@ -1,6 +1,6 @@
 import frappe
 from frappe.model.document import Document
-from frappe.utils import get_datetime, now_datetime, flt, getdate, date_diff
+from frappe.utils import date_diff, flt, get_datetime, getdate, now_datetime
 
 
 class LMSTask(Document):

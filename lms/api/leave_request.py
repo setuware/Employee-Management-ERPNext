@@ -1,6 +1,6 @@
 import frappe
-from frappe import _
 from frappe.utils import cint
+
 
 @frappe.whitelist()
 def get_leave_requests(page=1, page_size=10, search_term="", status=""):
@@ -159,9 +159,9 @@ def get_summary():
 def export_csv():
 	try:
 		import csv
-		from frappe.utils import get_site_path, now_datetime
-		import os
 		from io import StringIO
+
+		from frappe.utils import now_datetime
 		
 		leave_requests = frappe.get_all(
 			"LMS Leave Request",
@@ -175,7 +175,7 @@ def export_csv():
 					emp = frappe.get_doc("LMS Employee", lr["employee"])
 					lr["employee_name"] = emp.full_name
 					lr["employee_email"] = emp.email
-				except:
+				except frappe.DoesNotExistError:
 					lr["employee_name"] = ""
 					lr["employee_email"] = ""
 		

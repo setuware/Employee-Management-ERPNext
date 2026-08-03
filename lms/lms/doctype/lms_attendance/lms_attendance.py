@@ -1,6 +1,6 @@
 import frappe
 from frappe.model.document import Document
-from frappe.utils import get_datetime, now_datetime, flt
+from frappe.utils import flt, get_datetime
 
 WORK_START = (10, 0)
 WORK_END = (17, 0)

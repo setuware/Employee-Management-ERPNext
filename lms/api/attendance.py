@@ -1,5 +1,5 @@
 import frappe
-from frappe.utils import now_datetime, nowdate, getdate, flt, cint, add_days
+from frappe.utils import cint, flt, getdate, now_datetime, nowdate
 
 
 def get_employee_for_user(user=None):
@@ -25,7 +25,10 @@ def check_in():
 	try:
 		emp = get_employee_for_user()
 		if not emp:
-			return {"success": False, "message": "No LMS Employee record linked to your account. Contact your administrator."}
+			return {
+				"success": False,
+				"message": "No LMS Employee record linked to your account. Contact your administrator.",
+			}
 
 		today = nowdate()
 		existing = frappe.db.get_value(
@@ -67,7 +70,10 @@ def check_out():
 	try:
 		emp = get_employee_for_user()
 		if not emp:
-			return {"success": False, "message": "No LMS Employee record linked to your account. Contact your administrator."}
+			return {
+				"success": False,
+				"message": "No LMS Employee record linked to your account. Contact your administrator.",
+			}
 
 		today = nowdate()
 		existing = frappe.db.get_value(
@@ -134,7 +140,7 @@ def get_my_attendance(month=None, page=1, page_size=15):
 
 		filters = {"employee": emp}
 		if month:
-			from frappe.utils import get_last_day, get_first_day, getdate
+			from frappe.utils import get_first_day, get_last_day, getdate
 
 			month_date = getdate(f"{month}-01")
 			filters["attendance_date"] = ["between", [get_first_day(month_date), get_last_day(month_date)]]
@@ -180,7 +186,10 @@ def get_attendance_log(date=None, employee=None, status=None, page=1, page_size=
 
 		records = frappe.get_list(
 			"LMS Attendance",
-			fields=["name", "employee", "attendance_date", "check_in", "check_out", "work_hours", "status", "source", "notes"],
+			fields=[
+				"name", "employee", "attendance_date", "check_in", "check_out",
+				"work_hours", "status", "source", "notes",
+			],
 			filters=filters,
 			order_by="attendance_date desc, creation desc",
 			start=start,

@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  lint:
+    name: Ruff lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install ruff
+        run: pip install ruff
+      - name: Lint
+        run: ruff check lms
+
+  validate:
+    name: Syntax & JSON validation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Python compile check
+        run: python -m compileall -q lms
+      - name: Doctype JSON validation
+        run: |
+          python - <<'EOF'
+          import glob
+          import json
+
+          files = glob.glob("lms/**/*.json", recursive=True)
+          for f in files:
+              json.load(open(f))
+          print(f"Validated {len(files)} JSON files")
+          EOF

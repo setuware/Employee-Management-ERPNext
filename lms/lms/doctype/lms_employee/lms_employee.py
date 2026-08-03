@@ -1,6 +1,7 @@
 import frappe
 from frappe.model.document import Document
 
+
 class LMSEmployee(Document):
 	def validate(self):
 		if self.email:

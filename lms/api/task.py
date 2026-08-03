@@ -1,5 +1,5 @@
 import frappe
-from frappe.utils import now_datetime, get_datetime, flt, cint
+from frappe.utils import cint, flt, get_datetime, now_datetime
 
 from lms.api.attendance import get_employee_for_user, is_admin
 
@@ -175,7 +175,8 @@ def update_task(name, data):
 		emp = get_employee_for_user()
 
 		allowed_status = {"Not Started", "In Progress", "Completed", "Cancelled"}
-		changes = data.get("status") in allowed_status
+		if data.get("status") and data.get("status") not in allowed_status:
+			frappe.throw("Invalid status")
 		is_assignee = doc.assigned_to and doc.assigned_to == emp
 
 		if not is_admin() and not is_assignee:

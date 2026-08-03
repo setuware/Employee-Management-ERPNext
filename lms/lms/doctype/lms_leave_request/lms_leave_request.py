@@ -1,6 +1,7 @@
 import frappe
 from frappe.model.document import Document
-from frappe.utils import now_datetime, get_datetime
+from frappe.utils import now_datetime
+
 
 class LMSLeaveRequest(Document):
 	def before_insert(self):

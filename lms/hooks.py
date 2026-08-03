@@ -1,4 +1,3 @@
-from frappe import _
 
 app_name = "lms"
 app_title = "Employee Management & Leave Tracking"

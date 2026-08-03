@@ -1,6 +1,6 @@
 import frappe
-from frappe import _
 from frappe.utils import cint
+
 
 @frappe.whitelist()
 def get_employees(page=1, page_size=10, search_term=""):
