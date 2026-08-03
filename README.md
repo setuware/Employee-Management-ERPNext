@@ -41,20 +41,25 @@ Employee Management & Leave Tracking module built on ERPNext (Frappe Framework) 
 
 ### Steps
 
-1. **Install the app:**
+1. **Get the app** (repo must be cloned as folder name `lms`):
 ```bash
 cd frappe-bench
-bench get-app https://github.com/bitsandvolts/lms.git
-bench install-app lms
-bench migrate
+git clone https://github.com/setuware/Employee-Management-ERPNext.git apps/lms
 ```
 
-2. **Start the server:**
+2. **Install the app on your site:**
+```bash
+bench --site your-site.local install-app lms
+bench --site your-site.local migrate
+bench --site your-site.local clear-cache
+```
+
+3. **Start the server:**
 ```bash
 bench start
 ```
 
-3. **Access the application:**
+4. **Access the application:**
    - Navigate to: `http://localhost:8000/employee-list`
    - Or use the desktop icon "Employee Management & Leave Tracking"
 
@@ -95,12 +100,12 @@ See `API_DOCUMENTATION.md` for detailed API documentation.
 
 ## DocTypes
 
-### Employee
+### LMS Employee
 - **Fields:** Employee ID, Profile Picture, Full Name, Email, Department, Joining Date
 - **Validations:** Unique Employee ID, Email format, Date format
 
-### Leave Request
-- **Fields:** Leave ID (auto-generated), Employee, Leave Type, From Date, To Date, Status
+### LMS Leave Request
+- **Fields:** Leave ID (auto-generated), Employee (link to LMS Employee), Leave Type, From Date, To Date, Status
 - **Validations:** Date range validation, Employee existence, Status validation
 
 ## Documentation
@@ -127,4 +132,3 @@ See `API_DOCUMENTATION.md` for detailed API documentation.
 ## Support
 
 For issues or questions, refer to the documentation files or contact Bits and Volts Pvt. Ltd.
-# Employee-Management-ERPNext

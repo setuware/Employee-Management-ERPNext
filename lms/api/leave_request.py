@@ -20,7 +20,7 @@ def get_leave_requests(page=1, page_size=10, search_term="", status=""):
 			filters["status"] = status
 		
 		leave_requests = frappe.get_list(
-			"Leave Request",
+			"LMS Leave Request",
 			fields=["name", "leave_id", "employee", "leave_type", "from_date", "to_date", "status"],
 			filters=filters,
 			order_by="modified desc",
@@ -30,12 +30,12 @@ def get_leave_requests(page=1, page_size=10, search_term="", status=""):
 		
 		for lr in leave_requests:
 			if lr.get("employee"):
-				emp = frappe.get_doc("Employee", lr["employee"])
+				emp = frappe.get_doc("LMS Employee", lr["employee"])
 				lr["employee_name"] = emp.full_name
 				lr["employee_profile"] = emp.profile_picture
 				lr["employee_email"] = emp.email
 		
-		total_count = frappe.db.count("Leave Request", filters=filters)
+		total_count = len(frappe.get_all("LMS Leave Request", filters=filters))
 		
 		return {
 			"success": True,
@@ -57,7 +57,7 @@ def create_leave_request(data):
 			data = json.loads(data)
 		
 		doc = frappe.get_doc({
-			"doctype": "Leave Request",
+			"doctype": "LMS Leave Request",
 			"employee": data.get("employee"),
 			"leave_type": data.get("leave_type"),
 			"from_date": data.get("from_date"),
@@ -85,7 +85,7 @@ def update_leave_request(name, data):
 			import json
 			data = json.loads(data)
 		
-		doc = frappe.get_doc("Leave Request", name)
+		doc = frappe.get_doc("LMS Leave Request", name)
 		
 		if "employee" in data:
 			doc.employee = data["employee"]
@@ -115,11 +115,11 @@ def update_leave_request(name, data):
 @frappe.whitelist()
 def get_leave_request(name):
 	try:
-		doc = frappe.get_doc("Leave Request", name)
+		doc = frappe.get_doc("LMS Leave Request", name)
 		data = doc.as_dict()
 		
 		if data.get("employee"):
-			emp = frappe.get_doc("Employee", data["employee"])
+			emp = frappe.get_doc("LMS Employee", data["employee"])
 			data["employee_name"] = emp.full_name
 			data["employee_profile"] = emp.profile_picture
 			data["employee_email"] = emp.email
@@ -135,11 +135,11 @@ def get_leave_request(name):
 @frappe.whitelist()
 def get_summary():
 	try:
-		total = frappe.db.count("Leave Request")
-		approved = frappe.db.count("Leave Request", {"status": "Approved"})
-		pending = frappe.db.count("Leave Request", {"status": "Pending"})
-		canceled = frappe.db.count("Leave Request", {"status": "Canceled"})
-		rejected = frappe.db.count("Leave Request", {"status": "Rejected"})
+		total = frappe.db.count("LMS Leave Request")
+		approved = frappe.db.count("LMS Leave Request", {"status": "Approved"})
+		pending = frappe.db.count("LMS Leave Request", {"status": "Pending"})
+		canceled = frappe.db.count("LMS Leave Request", {"status": "Canceled"})
+		rejected = frappe.db.count("LMS Leave Request", {"status": "Rejected"})
 		
 		return {
 			"success": True,
@@ -164,7 +164,7 @@ def export_csv():
 		from io import StringIO
 		
 		leave_requests = frappe.get_all(
-			"Leave Request",
+			"LMS Leave Request",
 			fields=["leave_id", "employee", "leave_type", "from_date", "to_date", "status"],
 			order_by="modified desc"
 		)
@@ -172,7 +172,7 @@ def export_csv():
 		for lr in leave_requests:
 			if lr.get("employee"):
 				try:
-					emp = frappe.get_doc("Employee", lr["employee"])
+					emp = frappe.get_doc("LMS Employee", lr["employee"])
 					lr["employee_name"] = emp.full_name
 					lr["employee_email"] = emp.email
 				except:

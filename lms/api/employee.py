@@ -21,7 +21,7 @@ def get_employees(page=1, page_size=10, search_term=""):
 			}
 		
 		employees = frappe.get_list(
-			"Employee",
+			"LMS Employee",
 			fields=["name", "employee_id", "profile_picture", "full_name", "email", "department", "joining_date"],
 			filters=filters,
 			order_by="modified desc",
@@ -29,7 +29,7 @@ def get_employees(page=1, page_size=10, search_term=""):
 			page_length=page_size
 		)
 		
-		total_count = frappe.db.count("Employee", filters=filters)
+		total_count = len(frappe.get_all("LMS Employee", filters=filters))
 		
 		return {
 			"success": True,
@@ -51,7 +51,7 @@ def create_employee(data):
 			data = json.loads(data)
 		
 		doc = frappe.get_doc({
-			"doctype": "Employee",
+			"doctype": "LMS Employee",
 			"employee_id": data.get("employee_id"),
 			"profile_picture": data.get("profile_picture"),
 			"full_name": data.get("full_name"),
@@ -80,7 +80,7 @@ def update_employee(name, data):
 			import json
 			data = json.loads(data)
 		
-		doc = frappe.get_doc("Employee", name)
+		doc = frappe.get_doc("LMS Employee", name)
 		
 		if "employee_id" in data:
 			doc.employee_id = data["employee_id"]
@@ -112,7 +112,7 @@ def update_employee(name, data):
 @frappe.whitelist()
 def get_employee(name):
 	try:
-		doc = frappe.get_doc("Employee", name)
+		doc = frappe.get_doc("LMS Employee", name)
 		return {
 			"success": True,
 			"data": doc.as_dict()
@@ -124,7 +124,7 @@ def get_employee(name):
 @frappe.whitelist()
 def delete_employee(name):
 	try:
-		frappe.delete_doc("Employee", name)
+		frappe.delete_doc("LMS Employee", name)
 		frappe.db.commit()
 		return {
 			"success": True,

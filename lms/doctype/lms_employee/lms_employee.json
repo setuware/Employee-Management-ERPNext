@@ -6,59 +6,55 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "leave_id",
-  "employee",
-  "leave_type",
-  "from_date",
-  "to_date",
-  "status"
+  "employee_id",
+  "profile_picture",
+  "full_name",
+  "email",
+  "department",
+  "joining_date"
  ],
  "fields": [
   {
-   "fieldname": "leave_id",
+   "fieldname": "employee_id",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Leave ID",
-   "read_only": 1,
+   "label": "Employee ID",
+   "reqd": 1,
    "unique": 1
   },
   {
-   "fieldname": "employee",
+   "fieldname": "profile_picture",
+   "fieldtype": "Attach Image",
+   "label": "Profile Picture"
+  },
+  {
+   "fieldname": "full_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Full Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "email",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Email",
+   "options": "Email",
+   "reqd": 1
+  },
+  {
+   "fieldname": "department",
    "fieldtype": "Link",
    "in_list_view": 1,
-   "label": "Employee",
-   "options": "Employee",
+   "label": "Department",
+   "options": "Department",
    "reqd": 1
   },
   {
-   "fieldname": "leave_type",
-   "fieldtype": "Select",
-   "in_list_view": 1,
-   "label": "Leave Type",
-   "options": "Casual\nSick\nAnnual\nEmergency",
-   "reqd": 1
-  },
-  {
-   "fieldname": "from_date",
+   "fieldname": "joining_date",
    "fieldtype": "Date",
    "in_list_view": 1,
-   "label": "From Date",
-   "reqd": 1
-  },
-  {
-   "fieldname": "to_date",
-   "fieldtype": "Date",
-   "in_list_view": 1,
-   "label": "To Date",
-   "reqd": 1
-  },
-  {
-   "default": "Pending",
-   "fieldname": "status",
-   "fieldtype": "Select",
-   "in_list_view": 1,
-   "label": "Status",
-   "options": "Pending\nApproved\nRejected\nCanceled",
+   "label": "Joining Date",
    "reqd": 1
   }
  ],
@@ -67,7 +63,7 @@
  "modified": "2024-01-01 10:00:00.000000",
  "modified_by": "Administrator",
  "module": "LMS",
- "name": "Leave Request",
+ "name": "LMS Employee",
  "owner": "Administrator",
  "permissions": [
   {
@@ -94,7 +90,6 @@
    "write": 1
   },
   {
-   "create": 1,
    "email": 1,
    "export": 1,
    "print": 1,

@@ -1,8 +1,8 @@
-frappe.ui.form.on('Employee', {
+frappe.ui.form.on('LMS Employee', {
 	refresh: function(frm) {
 		if (!frm.is_new()) {
 			frm.add_custom_button(__('View Leave Requests'), function() {
-				frappe.set_route('List', 'Leave Request', {'employee': frm.doc.name});
+				frappe.set_route('List', 'LMS Leave Request', {'employee': frm.doc.name});
 			});
 		}
 	},

@@ -1,4 +1,4 @@
-frappe.ui.form.on('Leave Request', {
+frappe.ui.form.on('LMS Leave Request', {
 	refresh: function(frm) {
 		if (frm.doc.status === 'Pending' && frappe.user.has_role('HR Manager')) {
 			frm.add_custom_button(__('Approve'), function() {

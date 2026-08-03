@@ -6,55 +6,59 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "employee_id",
-  "profile_picture",
-  "full_name",
-  "email",
-  "department",
-  "joining_date"
+  "leave_id",
+  "employee",
+  "leave_type",
+  "from_date",
+  "to_date",
+  "status"
  ],
  "fields": [
   {
-   "fieldname": "employee_id",
+   "fieldname": "leave_id",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Employee ID",
-   "reqd": 1,
+   "label": "Leave ID",
+   "read_only": 1,
    "unique": 1
   },
   {
-   "fieldname": "profile_picture",
-   "fieldtype": "Attach Image",
-   "label": "Profile Picture"
-  },
-  {
-   "fieldname": "full_name",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "label": "Full Name",
-   "reqd": 1
-  },
-  {
-   "fieldname": "email",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "label": "Email",
-   "options": "Email",
-   "reqd": 1
-  },
-  {
-   "fieldname": "department",
+   "fieldname": "employee",
    "fieldtype": "Link",
    "in_list_view": 1,
-   "label": "Department",
-   "options": "Department",
+   "label": "Employee",
+   "options": "LMS Employee",
    "reqd": 1
   },
   {
-   "fieldname": "joining_date",
+   "fieldname": "leave_type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Leave Type",
+   "options": "Casual\nSick\nAnnual\nEmergency",
+   "reqd": 1
+  },
+  {
+   "fieldname": "from_date",
    "fieldtype": "Date",
    "in_list_view": 1,
-   "label": "Joining Date",
+   "label": "From Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "to_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "To Date",
+   "reqd": 1
+  },
+  {
+   "default": "Pending",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Status",
+   "options": "Pending\nApproved\nRejected\nCanceled",
    "reqd": 1
   }
  ],
@@ -63,7 +67,7 @@
  "modified": "2024-01-01 10:00:00.000000",
  "modified_by": "Administrator",
  "module": "LMS",
- "name": "Employee",
+ "name": "LMS Leave Request",
  "owner": "Administrator",
  "permissions": [
   {
@@ -90,6 +94,7 @@
    "write": 1
   },
   {
+   "create": 1,
    "email": 1,
    "export": 1,
    "print": 1,

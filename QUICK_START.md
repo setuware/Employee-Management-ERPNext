@@ -5,9 +5,9 @@
 ### Step 1: Install App
 ```bash
 cd frappe-bench
-bench get-app https://github.com/bitsandvolts/lms.git
-bench install-app lms
-bench migrate
+git clone https://github.com/setuware/Employee-Management-ERPNext.git apps/lms
+bench --site your-site.local install-app lms
+bench --site your-site.local migrate
 ```
 
 ### Step 2: Start Server

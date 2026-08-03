@@ -3,7 +3,7 @@
 ## ✅ Completed Features
 
 ### Employee Management
-- [x] Employee DocType created with all required fields
+- [x] LMS Employee DocType created with all required fields
 - [x] Employee ID field (unique, required)
 - [x] Profile Picture field (Attach Image)
 - [x] Full Name field (required)
@@ -17,7 +17,7 @@
 - [x] Pagination support
 
 ### Leave Requests
-- [x] Leave Request DocType created
+- [x] LMS Leave Request DocType created
 - [x] Leave ID field (auto-generated, unique)
 - [x] Employee field (Link to Employee, required)
 - [x] Leave Type field (Select: Casual/Sick/Annual/Emergency)
@@ -112,8 +112,8 @@
 - [x] LICENSE
 - [x] .gitignore
 - [x] lms/__init__.py
-- [x] lms/doctype/employee/ (all files)
-- [x] lms/doctype/leave_request/ (all files)
+- [x] lms/doctype/lms_employee/ (all files)
+- [x] lms/doctype/lms_leave_request/ (all files)
 - [x] lms/api/ (all files)
 - [x] lms/utils/ (all files)
 - [x] lms/www/ (all files)

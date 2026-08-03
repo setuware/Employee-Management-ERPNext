@@ -25,18 +25,23 @@ bench install-app erpnext
 
 ### 2. Install LMS App
 
+> Note: The app folder inside `apps/` **must** be named `lms` (the app name in `hooks.py`). If your repo is not named `lms`, clone it manually with the correct folder name — `bench get-app` cannot install an app whose repo name differs from the app name.
+
 ```bash
 cd frappe-bench
-bench get-app https://github.com/stymrj2/lms.git
-bench install-app lms
-bench migrate
+git clone https://github.com/setuware/Employee-Management-ERPNext.git apps/lms
+bench --site your-site.local install-app lms
+bench --site your-site.local migrate
 ```
+
+If you use a private repository, authenticate git first (personal access token or SSH key).
 
 ### 3. Create Site (if needed)
 
 ```bash
 bench new-site your-site.local
 bench --site your-site.local install-app lms
+bench --site your-site.local migrate
 ```
 
 ### 4. Access the Application

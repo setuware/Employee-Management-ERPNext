@@ -52,14 +52,14 @@ Assingment/
 ## Features Implemented
 
 ### 1. Employee Management
--  Employee DocType with fields: Employee ID, Profile Picture, Full Name, Email, Department, Joining Date
+-  LMS Employee DocType with fields: Employee ID, Profile Picture, Full Name, Email, Department, Joining Date
 -  Employee list with edit option
 -  Add/Edit employee form with validation
 -  Search functionality
 -  Pagination support
 
 ### 2. Leave Requests
--  Leave Request DocType with fields: ID, Employee, Leave Type, From Date, To Date, Status
+-  LMS Leave Request DocType with fields: ID, Employee, Leave Type, From Date, To Date, Status
 -  Leave listing screen
 -  Status handling (Pending, Approved, Rejected, Canceled)
 -  Filter by status
