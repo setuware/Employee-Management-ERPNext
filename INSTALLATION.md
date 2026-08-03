@@ -27,7 +27,7 @@ bench install-app erpnext
 
 ```bash
 cd frappe-bench
-bench get-app https://github.com/stymrj/lms.git
+bench get-app https://github.com/stymrj2/lms.git
 bench install-app lms
 bench migrate
 ```
