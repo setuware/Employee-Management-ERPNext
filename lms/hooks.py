@@ -20,8 +20,12 @@ web_include_css = [
 
 boot_session = "lms.boot.boot_session"
 
+after_migrate = "lms.setup.after_migrate"
+
 app_license = "MIT"
 
 website_route_rules = [
-	{"from_route": "/employee-list", "to_route": "employee_list"}
+	{"from_route": "/employee-list", "to_route": "employee_list"},
+	{"from_route": "/employee-portal", "to_route": "employee_portal"},
+	{"from_route": "/attendance-log", "to_route": "attendance_log"}
 ]
