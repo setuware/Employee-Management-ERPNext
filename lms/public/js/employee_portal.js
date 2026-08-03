@@ -6,6 +6,7 @@ frappe.ready(function() {
 	loadMySummary();
 	loadMyTasks();
 	loadHistory();
+	loadMyLeaves();
 });
 
 function showError(msg) {
@@ -129,7 +130,7 @@ function loadMyTasks() {
 				tr.innerHTML = [
 					'<td><strong>' + task.title + '</strong></td>',
 					'<td>' + task.priority + '</td>',
-					'<td><span class="status-badge">' + task.status + '</span></td>',
+					'<td><span class="status-badge ' + String(task.status).toLowerCase().replace(/\s+/g, '_') + '">' + task.status + '</span></td>',
 					'<td>' + (task.due_date || '-') + '</td>',
 					'<td class="task-time" id="time-' + task.name + '">' + (task.total_time || '0.00') + '</td>',
 					'<td>' + timerButton(task) + '</td>'
@@ -224,11 +225,98 @@ function loadHistory(page = 1) {
 					'<td>' + (att.check_in ? new Date(att.check_in).toLocaleTimeString() : '-') + '</td>',
 					'<td>' + (att.check_out ? new Date(att.check_out).toLocaleTimeString() : '-') + '</td>',
 					'<td>' + (att.work_hours || '0.00') + '</td>',
-					'<td><span class="status-badge">' + att.status + '</span></td>',
+					'<td><span class="status-badge ' + String(att.status || '').toLowerCase().replace(/\s+/g, '_') + '">' + att.status + '</span></td>',
 					'<td>' + (att.notes || '') + '</td>'
 				].join('');
 				tbody.appendChild(tr);
 			});
+		}
+	});
+}
+
+function loadMyLeaves(page = 1) {
+	frappe.call({
+		method: 'lms.api.leave_request.get_my_leave_requests',
+		args: { page: page, page_size: 10 },
+		callback: function(r) {
+			const tbody = document.getElementById('my-leaves-tbody');
+			const empty = document.getElementById('my-leaves-empty');
+			tbody.innerHTML = '';
+			if (!r.message || !r.message.success || !r.message.data.length) {
+				empty.style.display = 'block';
+				return;
+			}
+			empty.style.display = 'none';
+
+			r.message.data.forEach(function(lr) {
+				const tr = document.createElement('tr');
+				let actions = '';
+				if (lr.status === 'Pending') {
+					actions = '<button class="sw-btn sw-btn-danger sw-btn-sm" onclick="cancelLeave(\'' + lr.name + '\')">Cancel</button>';
+				} else {
+					actions = '<span class="lms-empty" style="padding:0">-</span>';
+				}
+				tr.innerHTML = [
+					'<td>' + lr.leave_id + '</td>',
+					'<td>' + lr.leave_type + '</td>',
+					'<td>' + lr.from_date + '</td>',
+					'<td>' + lr.to_date + '</td>',
+					'<td><span class="status-badge ' + lr.status.toLowerCase() + '">' + lr.status + '</span></td>',
+					'<td>' + actions + '</td>'
+				].join('');
+				tbody.appendChild(tr);
+			});
+		}
+	});
+}
+
+function applyLeave() {
+	const leaveType = document.getElementById('leave-type').value;
+	const fromDate = document.getElementById('leave-from').value;
+	const toDate = document.getElementById('leave-to').value;
+
+	if (!leaveType || !fromDate || !toDate) {
+		showError('Please select leave type and both dates.');
+		return;
+	}
+
+	frappe.call({
+		method: 'lms.api.leave_request.create_leave_request',
+		args: {
+			data: {
+				leave_type: leaveType,
+				from_date: fromDate,
+				to_date: toDate
+			}
+		},
+		callback: function(r) {
+			if (r.message && r.message.success) {
+				frappe.show_alert({message: r.message.message, indicator: 'green'});
+				document.getElementById('leave-type').value = '';
+				document.getElementById('leave-from').value = '';
+				document.getElementById('leave-to').value = '';
+				loadMyLeaves();
+			} else if (r.message) {
+				showError(r.message.message);
+			}
+		}
+	});
+}
+
+function cancelLeave(name) {
+	frappe.call({
+		method: 'lms.api.leave_request.update_leave_request',
+		args: {
+			name: name,
+			data: { status: 'Canceled' }
+		},
+		callback: function(r) {
+			if (r.message && r.message.success) {
+				frappe.show_alert({message: 'Leave request canceled', indicator: 'green'});
+				loadMyLeaves();
+			} else if (r.message) {
+				showError(r.message.message);
+			}
 		}
 	});
 }

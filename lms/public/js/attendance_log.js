@@ -68,7 +68,7 @@ function loadLog(page) {
 					'<td>' + (att.check_in ? new Date(att.check_in).toLocaleString() : '-') + '</td>',
 					'<td>' + (att.check_out ? new Date(att.check_out).toLocaleString() : '-') + '</td>',
 					'<td>' + (att.work_hours || '0.00') + '</td>',
-					'<td><span class="status-badge">' + att.status + '</span></td>',
+					'<td><span class="status-badge ' + String(att.status || '').toLowerCase().replace(/\s+/g, '_') + '">' + att.status + '</span></td>',
 					'<td>' + att.source + '</td>',
 					'<td><button class="sw-btn sw-btn-danger sw-btn-sm" onclick="deleteRecord(\'' + att.name + '\')">Delete</button></td>'
 				].join('');

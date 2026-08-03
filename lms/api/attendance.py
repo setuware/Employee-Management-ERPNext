@@ -1,23 +1,7 @@
 import frappe
 from frappe.utils import cint, flt, getdate, now_datetime, nowdate
 
-
-def get_employee_for_user(user=None):
-	if not user:
-		user = frappe.session.user
-	if user == "Administrator":
-		return None
-	return frappe.db.get_value("LMS Employee", {"user": user})
-
-
-def is_admin():
-	roles = frappe.get_roles()
-	return "System Manager" in roles or "HR Manager" in roles
-
-
-def _require_admin():
-	if not is_admin():
-		frappe.throw("You do not have permission to perform this action")
+from lms.api.auth import get_employee_for_user, require_admin
 
 
 @frappe.whitelist()
@@ -171,7 +155,7 @@ def get_my_attendance(month=None, page=1, page_size=15):
 @frappe.whitelist()
 def get_attendance_log(date=None, employee=None, status=None, page=1, page_size=20):
 	try:
-		_require_admin()
+		require_admin()
 		page = cint(page) or 1
 		page_size = cint(page_size) or 20
 		start = (page - 1) * page_size
@@ -229,7 +213,7 @@ def _clean_dt(value):
 @frappe.whitelist()
 def record_attendance(data):
 	try:
-		_require_admin()
+		require_admin()
 		if isinstance(data, str):
 			import json
 			data = json.loads(data)
@@ -278,7 +262,7 @@ def record_attendance(data):
 @frappe.whitelist()
 def delete_attendance(name):
 	try:
-		_require_admin()
+		require_admin()
 		frappe.delete_doc("LMS Attendance", name, force=True)
 		frappe.db.commit()
 		return {"success": True, "message": "Attendance record deleted"}
@@ -290,7 +274,7 @@ def delete_attendance(name):
 @frappe.whitelist()
 def get_attendance_summary(date=None):
 	try:
-		_require_admin()
+		require_admin()
 		date = date or nowdate()
 		records = frappe.get_all(
 			"LMS Attendance",

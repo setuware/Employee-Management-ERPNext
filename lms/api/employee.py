@@ -1,14 +1,17 @@
 import frappe
 from frappe.utils import cint
 
+from lms.api.auth import get_employee_for_user, is_admin, require_admin
+
 
 @frappe.whitelist()
 def get_employees(page=1, page_size=10, search_term=""):
 	try:
+		require_admin()
 		page = cint(page) or 1
 		page_size = cint(page_size) or 10
 		start = (page - 1) * page_size
-		
+
 		filters = {}
 		if search_term:
 			filters = {
@@ -19,7 +22,7 @@ def get_employees(page=1, page_size=10, search_term=""):
 					["department", "like", f"%{search_term}%"]
 				]
 			}
-		
+
 		employees = frappe.get_list(
 			"LMS Employee",
 			fields=["name", "employee_id", "profile_picture", "full_name", "email", "department", "joining_date"],
@@ -28,9 +31,9 @@ def get_employees(page=1, page_size=10, search_term=""):
 			start=start,
 			page_length=page_size
 		)
-		
+
 		total_count = len(frappe.get_all("LMS Employee", filters=filters))
-		
+
 		return {
 			"success": True,
 			"data": employees,
@@ -46,10 +49,11 @@ def get_employees(page=1, page_size=10, search_term=""):
 @frappe.whitelist()
 def create_employee(data):
 	try:
+		require_admin()
 		if isinstance(data, str):
 			import json
 			data = json.loads(data)
-		
+
 		doc = frappe.get_doc({
 			"doctype": "LMS Employee",
 			"employee_id": data.get("employee_id"),
@@ -62,7 +66,7 @@ def create_employee(data):
 		})
 		doc.insert()
 		frappe.db.commit()
-		
+
 		return {
 			"success": True,
 			"message": "Employee created successfully",
@@ -77,12 +81,13 @@ def create_employee(data):
 @frappe.whitelist()
 def update_employee(name, data):
 	try:
+		require_admin()
 		if isinstance(data, str):
 			import json
 			data = json.loads(data)
-		
+
 		doc = frappe.get_doc("LMS Employee", name)
-		
+
 		if "employee_id" in data:
 			doc.employee_id = data["employee_id"]
 		if "profile_picture" in data:
@@ -97,10 +102,10 @@ def update_employee(name, data):
 			doc.department = data["department"]
 		if "joining_date" in data:
 			doc.joining_date = data["joining_date"]
-		
+
 		doc.save()
 		frappe.db.commit()
-		
+
 		return {
 			"success": True,
 			"message": "Employee updated successfully",
@@ -115,6 +120,8 @@ def update_employee(name, data):
 @frappe.whitelist()
 def get_employee(name):
 	try:
+		if not is_admin() and get_employee_for_user() != name:
+			frappe.throw("You do not have permission to view this record")
 		doc = frappe.get_doc("LMS Employee", name)
 		return {
 			"success": True,
@@ -127,6 +134,7 @@ def get_employee(name):
 @frappe.whitelist()
 def delete_employee(name):
 	try:
+		require_admin()
 		frappe.delete_doc("LMS Employee", name)
 		frappe.db.commit()
 		return {
@@ -136,14 +144,6 @@ def delete_employee(name):
 	except Exception as e:
 		frappe.log_error(frappe.get_traceback(), "Delete Employee Error")
 		return {"success": False, "message": str(e)}
-
-
-def get_employee_for_user(user=None):
-	if not user:
-		user = frappe.session.user
-	if user == "Administrator":
-		return None
-	return frappe.db.get_value("LMS Employee", {"user": user})
 
 
 @frappe.whitelist()
@@ -177,6 +177,7 @@ def get_my_profile():
 @frappe.whitelist()
 def get_employees_options():
 	try:
+		require_admin()
 		employees = frappe.get_all(
 			"LMS Employee",
 			fields=["name", "employee_id", "full_name"],

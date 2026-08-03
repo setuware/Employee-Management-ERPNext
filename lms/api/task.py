@@ -1,12 +1,7 @@
 import frappe
 from frappe.utils import cint, flt, get_datetime, now_datetime
 
-from lms.api.attendance import get_employee_for_user, is_admin
-
-
-def _require_admin():
-	if not is_admin():
-		frappe.throw("You do not have permission to perform this action")
+from lms.api.auth import get_employee_for_user, is_admin, require_admin
 
 
 def _task_dict(doc):
@@ -38,7 +33,7 @@ def _task_dict(doc):
 @frappe.whitelist()
 def get_tasks(status=None, assigned_to=None, search_term="", page=1, page_size=20):
 	try:
-		_require_admin()
+		require_admin()
 		page = cint(page) or 1
 		page_size = cint(page_size) or 20
 		start = (page - 1) * page_size
@@ -129,7 +124,7 @@ def get_task_detail(name):
 @frappe.whitelist()
 def create_task(data):
 	try:
-		_require_admin()
+		require_admin()
 		if isinstance(data, str):
 			import json
 			data = json.loads(data)
@@ -221,7 +216,7 @@ def update_task(name, data):
 @frappe.whitelist()
 def delete_task(name):
 	try:
-		_require_admin()
+		require_admin()
 		frappe.delete_doc("LMS Task", name, force=True)
 		frappe.db.commit()
 		return {"success": True, "message": "Task deleted"}

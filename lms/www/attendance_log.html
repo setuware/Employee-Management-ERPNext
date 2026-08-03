@@ -4,7 +4,7 @@
 
 {% block page_content %}
 <div class="lms-container">
-	<div class="sw-nav">
+	<nav class="sw-nav">
 		<a href="/" class="sw-nav-brand">Setuware</a>
 		<div class="sw-nav-links">
 			<a href="/employee-portal">My Portal</a>
@@ -13,7 +13,10 @@
 			<a href="/tasks">Tasks</a>
 			<a href="/contact">Contact</a>
 		</div>
-	</div>
+		<div class="sw-nav-user">
+			<a href="/api/method/logout" class="sw-btn sw-btn-outline sw-btn-sm">Logout</a>
+		</div>
+	</nav>
 
 	<div class="page-header">
 		<h1>Attendance Log</h1>
@@ -125,6 +128,31 @@
 		</div>
 	</div>
 </div>
+
+<footer class="sw-footer">
+	<div class="sw-container">
+		<div class="sw-footer-grid">
+			<div>
+				<div class="sw-footer-brand">Setuware Technologies</div>
+				<p class="sw-footer-sub">Enterprise software, cloud &amp; AI from Gurugram, India.</p>
+			</div>
+			<div>
+				<div class="sw-footer-head">Company</div>
+				<a href="/services">Services</a>
+				<a href="/process">How We Work</a>
+				<a href="/contact">Contact</a>
+			</div>
+			<div>
+				<div class="sw-footer-head">Employee</div>
+				<a href="/employee-portal">My Portal</a>
+				<a href="/employee-list">Admin Dashboard</a>
+				<a href="/attendance-log">Attendance Log</a>
+				<a href="/tasks">Tasks</a>
+			</div>
+		</div>
+		<div class="sw-footer-bottom">© 2026 Setuware Technologies. All rights reserved.</div>
+	</div>
+</footer>
 
 <script src="/assets/lms/js/attendance_log.js"></script>
 {% endblock %}

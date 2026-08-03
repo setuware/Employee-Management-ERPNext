@@ -1,5 +1,7 @@
 import frappe
 
+from lms.api.auth import is_admin
+
 
 def get_context(context):
 	if frappe.session.user == "Guest":
@@ -9,3 +11,5 @@ def get_context(context):
 	context.title = "My Portal | Setuware Technologies"
 	context.no_cache = 1
 	context.show_sidebar = False
+	context.logged_in = True
+	context.is_admin = is_admin()

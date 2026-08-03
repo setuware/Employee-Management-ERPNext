@@ -4,6 +4,23 @@
 
 {% block page_content %}
 <div class="sw-site">
+	<nav class="sw-nav">
+		<a href="/" class="sw-nav-brand">Setuware</a>
+		<div class="sw-nav-links">
+			<a href="/services">Services</a>
+			<a href="/process">How We Work</a>
+			<a href="/contact">Contact</a>
+			{% if is_admin %}<a href="/employee-list">Admin</a>{% endif %}
+		</div>
+		<div class="sw-nav-user">
+			{% if logged_in %}
+			<a href="/employee-portal" class="sw-btn sw-btn-light sw-btn-sm">My Portal</a>
+			{% else %}
+			<a href="/login?redirect-to=/employee-portal" class="sw-btn sw-btn-light sw-btn-sm">Employee Login</a>
+			{% endif %}
+		</div>
+	</nav>
+
 	<section class="sw-hero sw-hero-small">
 		<div class="sw-container">
 			<h1>Our Services</h1>
@@ -58,4 +75,33 @@
 		</div>
 	</section>
 </div>
+
+<footer class="sw-footer">
+	<div class="sw-container">
+		<div class="sw-footer-grid">
+			<div>
+				<div class="sw-footer-brand">Setuware Technologies</div>
+				<p class="sw-footer-sub">Enterprise software, cloud &amp; AI from Gurugram, India.</p>
+			</div>
+			<div>
+				<div class="sw-footer-head">Company</div>
+				<a href="/services">Services</a>
+				<a href="/process">How We Work</a>
+				<a href="/contact">Contact</a>
+			</div>
+			<div>
+				<div class="sw-footer-head">Employee</div>
+				{% if logged_in %}
+				<a href="/employee-portal">My Portal</a>
+				{% else %}
+				<a href="/login?redirect-to=/employee-portal">Employee Login</a>
+				{% endif %}
+				{% if is_admin %}
+				<a href="/employee-list">Admin Dashboard</a>
+				{% endif %}
+			</div>
+		</div>
+		<div class="sw-footer-bottom">© 2026 Setuware Technologies. All rights reserved.</div>
+	</div>
+</footer>
 {% endblock %}

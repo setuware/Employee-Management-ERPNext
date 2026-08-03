@@ -4,20 +4,25 @@
 
 {% block page_content %}
 <div class="lms-container">
-	<div class="sw-nav">
+	<nav class="sw-nav">
 		<a href="/" class="sw-nav-brand">Setuware</a>
 		<div class="sw-nav-links">
 			<a href="/employee-portal">My Portal</a>
+			{% if is_admin %}
 			<a href="/employee-list">Admin Dashboard</a>
 			<a href="/attendance-log">Attendance Log</a>
 			<a href="/tasks">Tasks</a>
+			{% endif %}
 			<a href="/contact">Contact</a>
 		</div>
-	</div>
+		<div class="sw-nav-user">
+			<a href="/api/method/logout" class="sw-btn sw-btn-outline sw-btn-sm">Logout</a>
+		</div>
+	</nav>
 
 	<div class="page-header">
 		<h1 id="portal-name">My Portal</h1>
-		<p id="portal-sub" class="page-sub">Employee self-service — attendance, check-in/out and tasks.</p>
+		<p id="portal-sub" class="page-sub">Employee self-service — attendance, leave and tasks.</p>
 	</div>
 
 	<div id="no-employee-warning" class="lms-alert lms-alert-warning" style="display:none">
@@ -93,6 +98,53 @@
 
 	<div class="panel-container" style="margin-top: 24px;">
 		<div class="panel-header">
+			<h2>Leave Management</h2>
+		</div>
+		<div class="panel-body">
+			<div class="form-grid">
+				<div class="filter-row">
+					<label>Leave Type *</label>
+					<select id="leave-type">
+						<option value="">Select type...</option>
+						<option>Casual</option>
+						<option>Sick</option>
+						<option>Annual</option>
+						<option>Emergency</option>
+					</select>
+				</div>
+				<div class="filter-row">
+					<label>From Date *</label>
+					<input type="date" id="leave-from">
+				</div>
+				<div class="filter-row">
+					<label>To Date *</label>
+					<input type="date" id="leave-to">
+				</div>
+				<div class="filter-row">
+					<button class="sw-btn sw-btn-primary" onclick="applyLeave()">Apply for Leave</button>
+				</div>
+			</div>
+			<div class="table-container" style="margin-top: 20px;">
+				<table class="data-table">
+					<thead>
+						<tr>
+							<th>Leave ID</th>
+							<th>Type</th>
+							<th>From</th>
+							<th>To</th>
+							<th>Status</th>
+							<th>Actions</th>
+						</tr>
+					</thead>
+					<tbody id="my-leaves-tbody"></tbody>
+				</table>
+				<div id="my-leaves-empty" class="lms-empty" style="display:none">No leave requests yet — apply for your first leave above.</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="panel-container" style="margin-top: 24px;">
+		<div class="panel-header">
 			<h2>Attendance History</h2>
 		</div>
 		<div class="panel-body">
@@ -114,6 +166,33 @@
 		</div>
 	</div>
 </div>
+
+<footer class="sw-footer">
+	<div class="sw-container">
+		<div class="sw-footer-grid">
+			<div>
+				<div class="sw-footer-brand">Setuware Technologies</div>
+				<p class="sw-footer-sub">Enterprise software, cloud &amp; AI from Gurugram, India.</p>
+			</div>
+			<div>
+				<div class="sw-footer-head">Company</div>
+				<a href="/services">Services</a>
+				<a href="/process">How We Work</a>
+				<a href="/contact">Contact</a>
+			</div>
+			<div>
+				<div class="sw-footer-head">Employee</div>
+				<a href="/employee-portal">My Portal</a>
+				{% if is_admin %}
+				<a href="/employee-list">Admin Dashboard</a>
+				<a href="/attendance-log">Attendance Log</a>
+				<a href="/tasks">Tasks</a>
+				{% endif %}
+			</div>
+		</div>
+		<div class="sw-footer-bottom">© 2026 Setuware Technologies. All rights reserved.</div>
+	</div>
+</footer>
 
 <script src="/assets/lms/js/employee_portal.js"></script>
 {% endblock %}
