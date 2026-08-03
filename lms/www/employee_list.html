@@ -1,0 +1,168 @@
+{% extends "templates/web.html" %}
+
+{% block title %}Employee List{% endblock %}
+
+{% block page_content %}
+<div class="lms-container">
+	<div class="page-header">
+		<h1>Employee Management & Leave Tracking</h1>
+	</div>
+	
+	<div class="nav-tabs">
+		<button class="tab-btn active" onclick="showTab('employee-list')">Employee List</button>
+		<button class="tab-btn" onclick="showTab('leave-requests')">Leave Requests</button>
+		<button class="tab-btn" onclick="showTab('summary-report')">Summary Report</button>
+	</div>
+	
+	<div id="employee-list" class="tab-content active">
+		<div class="panel-container">
+			<div class="panel-left">
+				<div class="panel-header">
+					<h2>Employee List</h2>
+				</div>
+				<div class="panel-body">
+					<div class="search-bar">
+						<input type="text" id="employee-search" placeholder="Search employees..." onkeyup="searchEmployees()">
+					</div>
+					<div class="table-container">
+						<table class="data-table" id="employee-table">
+							<thead>
+								<tr>
+									<th>ID</th>
+									<th>Profile</th>
+									<th>Name</th>
+									<th>Email</th>
+									<th>Dept</th>
+									<th>Joining Date</th>
+									<th>Edit</th>
+								</tr>
+							</thead>
+							<tbody id="employee-tbody">
+							</tbody>
+						</table>
+					</div>
+					<div class="pagination" id="employee-pagination"></div>
+					<button class="btn btn-primary" onclick="showAddEmployeeForm()">+ Add Employee</button>
+				</div>
+			</div>
+			
+			<div class="panel-right">
+				<div class="panel-header">
+					<h2 id="form-title">Add Employee</h2>
+				</div>
+				<div class="panel-body">
+					<form id="employee-form" onsubmit="saveEmployee(event)">
+						<input type="hidden" id="employee-name" name="name">
+						<div class="form-group">
+							<label>ID</label>
+							<input type="text" id="employee-id" name="employee_id" placeholder="Enter Emp_ID" required>
+						</div>
+						<div class="form-group">
+							<label>Full Name</label>
+							<input type="text" id="full-name" name="full_name" placeholder="Enter full name..." required>
+						</div>
+						<div class="form-group">
+							<label>Email</label>
+							<input type="email" id="email" name="email" placeholder="Enter email address..." required>
+						</div>
+						<div class="form-group">
+							<label>Department</label>
+							<select id="department" name="department" required>
+								<option value="">Select department...</option>
+							</select>
+						</div>
+						<div class="form-group">
+							<label>Joining Date</label>
+							<input type="date" id="joining-date" name="joining_date" placeholder="YYYY-MM-DD" required>
+						</div>
+						<div class="form-group">
+							<label>Profile Picture</label>
+							<div class="profile-upload">
+								<img id="profile-preview" src="" alt="Profile" style="display:none;">
+								<button type="button" class="btn btn-secondary" onclick="uploadProfilePicture()">Upload Image</button>
+								<input type="hidden" id="profile-picture" name="profile_picture">
+							</div>
+						</div>
+						<button type="submit" class="btn btn-primary">✓ Save</button>
+						<button type="button" class="btn btn-secondary" onclick="resetForm()">Cancel</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div id="leave-requests" class="tab-content" style="display:none;">
+		<div class="panel-container">
+			<div class="panel-left">
+				<div class="panel-header">
+					<h2>Leave Requests</h2>
+				</div>
+				<div class="panel-body">
+					<div class="search-bar">
+						<input type="text" id="leave-search" placeholder="Search leave requests..." onkeyup="searchLeaveRequests()">
+						<select id="status-filter" onchange="filterLeaveRequests()">
+							<option value="">All Status</option>
+							<option value="Pending">Pending</option>
+							<option value="Approved">Approved</option>
+							<option value="Rejected">Rejected</option>
+							<option value="Canceled">Canceled</option>
+						</select>
+					</div>
+					<div class="table-container">
+						<table class="data-table" id="leave-table">
+							<thead>
+								<tr>
+									<th>ID</th>
+									<th>Employee</th>
+									<th>Leave Type</th>
+									<th>From Date</th>
+									<th>To Date</th>
+									<th>Status</th>
+								</tr>
+							</thead>
+							<tbody id="leave-tbody">
+							</tbody>
+						</table>
+					</div>
+					<div class="pagination" id="leave-pagination"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div id="summary-report" class="tab-content" style="display:none;">
+		<div class="panel-container">
+			<div class="panel-right">
+				<div class="panel-header">
+					<h2>Summary Report</h2>
+				</div>
+				<div class="panel-body">
+					<div class="summary-stats">
+						<div class="stat-item">
+							<label>Total Leaves:</label>
+							<span id="total-leaves">0</span>
+						</div>
+						<div class="stat-item">
+							<label>Approved Leaves:</label>
+							<span id="approved-leaves">0</span>
+						</div>
+						<div class="stat-item">
+							<label>Pending Leaves:</label>
+							<span id="pending-leaves">0</span>
+						</div>
+						<div class="stat-item">
+							<label>Canceled Leaves:</label>
+							<span id="canceled-leaves">0</span>
+						</div>
+					</div>
+					<button class="btn btn-primary" onclick="exportCSV()">
+						<span>📥</span> Download CSV
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script src="/assets/lms/js/employee_list.js"></script>
+{% endblock %}

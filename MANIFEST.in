@@ -1,0 +1,10 @@
+include README.md
+include requirements.txt
+include LICENSE
+recursive-include lms *.json
+recursive-include lms *.py
+recursive-include lms *.js
+recursive-include lms *.css
+recursive-include lms *.html
+recursive-exclude * __pycache__
+recursive-exclude * *.pyc
