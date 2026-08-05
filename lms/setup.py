@@ -101,6 +101,7 @@ def create_charts():
 			"time_interval": chart.get("time_interval"),
 			"timeseries": chart.get("timeseries", 0),
 			"type": chart["type"],
+			"filters_json": "{}",
 			"is_public": 1,
 			"module": "LMS",
 		})
