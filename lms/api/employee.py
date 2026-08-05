@@ -14,20 +14,26 @@ def _ensure_login(email, password, full_name):
 		user_doc = frappe.get_doc("User", exists)
 		if password:
 			user_doc.new_password = password
+			user_doc.save(ignore_permissions=True)
 	else:
-		user_doc = frappe.get_doc({
+		frappe.get_doc({
 			"doctype": "User",
 			"email": email,
 			"first_name": full_name or email.split("@")[0],
 			"send_welcome_email": 0,
 			"new_password": password,
-		})
-		user_doc.insert(ignore_permissions=True)
+		}).insert(ignore_permissions=True)
 
-	if not frappe.db.exists("Has Role", {"parent": user_doc.name, "role": "Employee"}):
-		user_doc.append("roles", {"role": "Employee"})
-	user_doc.save(ignore_permissions=True)
-	return user_doc.name
+	if not frappe.db.exists("Has Role", {"parent": email, "role": "Employee"}):
+		frappe.get_doc({
+			"doctype": "Has Role",
+			"parent": email,
+			"parenttype": "User",
+			"parentfield": "roles",
+			"role": "Employee",
+		}).insert(ignore_permissions=True)
+	frappe.db.commit()
+	return email
 
 
 def _employee_dict(doc):
