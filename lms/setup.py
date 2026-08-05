@@ -41,7 +41,7 @@ def create_workspace():
 			'<a href="/employee-portal" class="mr-2">My Portal</a>'
 			'<a href="/employee-list" class="mr-2">Employee Directory</a>'
 			'<a href="/attendance-log" class="mr-2">Attendance Log</a>'
-			'<a href="/tasks">Tasks</a>'
+			'<a href="/work-tasks" class="mr-2">Tasks</a>'
 		),
 	})
 

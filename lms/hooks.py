@@ -27,5 +27,6 @@ app_license = "MIT"
 website_route_rules = [
 	{"from_route": "/employee-list", "to_route": "employee_list"},
 	{"from_route": "/employee-portal", "to_route": "employee_portal"},
-	{"from_route": "/attendance-log", "to_route": "attendance_log"}
+	{"from_route": "/attendance-log", "to_route": "attendance_log"},
+	{"from_route": "/work-tasks", "to_route": "tasks"}
 ]

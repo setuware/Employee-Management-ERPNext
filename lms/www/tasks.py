@@ -5,7 +5,7 @@ from lms.api.auth import is_admin
 
 def get_context(context):
 	if frappe.session.user == "Guest":
-		frappe.local.flags.redirect_location = "/login?redirect-to=/tasks"
+		frappe.local.flags.redirect_location = "/login?redirect-to=/work-tasks"
 		raise frappe.Redirect
 
 	if not is_admin():
