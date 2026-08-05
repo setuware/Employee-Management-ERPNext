@@ -10,22 +10,21 @@ def _ensure_login(email, password, full_name):
 		return None
 
 	exists = frappe.db.exists("User", {"email": email})
-	if not exists:
+	if exists:
+		user_doc = frappe.get_doc("User", exists)
+		if password:
+			user_doc.new_password = password
+	else:
 		user_doc = frappe.get_doc({
 			"doctype": "User",
 			"email": email,
 			"first_name": full_name or email.split("@")[0],
 			"send_welcome_email": 0,
 			"new_password": password,
-			"roles": [{"role": "Employee"}],
 		})
 		user_doc.insert(ignore_permissions=True)
-		return user_doc.name
 
-	user_doc = frappe.get_doc("User", exists)
-	if password:
-		user_doc.new_password = password
-	if not frappe.db.exists("Has Role", {"parent": exists, "role": "Employee"}):
+	if not frappe.db.exists("Has Role", {"parent": user_doc.name, "role": "Employee"}):
 		user_doc.append("roles", {"role": "Employee"})
 	user_doc.save(ignore_permissions=True)
 	return user_doc.name
