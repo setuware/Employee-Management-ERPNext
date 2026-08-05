@@ -205,15 +205,21 @@ def create_workspace():
 	doc.is_hidden = 0
 	doc.sequence_id = 1
 	doc.content = content
-	doc.shortcuts = shortcuts
-	doc.number_cards = [
-		{"label": label, "number_card_name": label}
-		for label in ("Total Employees", "Pending Leave Requests", "Approved Leave Requests", "Open Tasks")
-	]
-	doc.charts = [
-		{"label": label, "chart_name": label}
-		for label in ("Employees by Department", "Leave Requests by Status", "Attendance Trend")
-	]
-	doc.links = links
+
+	doc.shortcuts = []
+	for s in shortcuts:
+		doc.append("shortcuts", s)
+
+	doc.number_cards = []
+	for label in ("Total Employees", "Pending Leave Requests", "Approved Leave Requests", "Open Tasks"):
+		doc.append("number_cards", {"label": label, "number_card_name": label})
+
+	doc.charts = []
+	for label in ("Employees by Department", "Leave Requests by Status", "Attendance Trend"):
+		doc.append("charts", {"label": label, "chart_name": label})
+
+	doc.links = []
+	for link in links:
+		doc.append("links", link)
 	doc.save(ignore_permissions=True)
 	frappe.db.commit()
