@@ -4,6 +4,46 @@ from frappe.utils import cint
 from lms.api.auth import get_employee_for_user, is_admin, require_admin
 
 
+def _ensure_login(email, password, full_name):
+	"""Create or update the User account linked to an employee email."""
+	if not email:
+		return None
+
+	exists = frappe.db.exists("User", {"email": email})
+	if not exists:
+		user_doc = frappe.get_doc({
+			"doctype": "User",
+			"email": email,
+			"first_name": full_name or email.split("@")[0],
+			"send_welcome_email": 0,
+			"new_password": password,
+			"roles": [{"role": "Employee"}],
+		})
+		user_doc.insert(ignore_permissions=True)
+		return user_doc.name
+
+	user_doc = frappe.get_doc("User", exists)
+	if password:
+		user_doc.new_password = password
+	if not frappe.db.exists("Has Role", {"parent": exists, "role": "Employee"}):
+		user_doc.append("roles", {"role": "Employee"})
+	user_doc.save(ignore_permissions=True)
+	return user_doc.name
+
+
+def _employee_dict(doc):
+	return {
+		"name": doc.name,
+		"employee_id": doc.employee_id,
+		"profile_picture": doc.profile_picture,
+		"full_name": doc.full_name,
+		"email": doc.email,
+		"user": doc.user,
+		"department": doc.department,
+		"joining_date": doc.joining_date,
+	}
+
+
 @frappe.whitelist()
 def get_employees(page=1, page_size=10, search_term=""):
 	try:
@@ -67,10 +107,23 @@ def create_employee(data):
 		doc.insert()
 		frappe.db.commit()
 
+		login_created = False
+		email = data.get("email")
+		if email and data.get("password"):
+			user = _ensure_login(email, data.get("password"), doc.full_name)
+			doc.user = user
+			doc.save()
+			frappe.db.commit()
+			login_created = True
+
+		message = "Employee created successfully"
+		if login_created:
+			message = f"Employee created. Login ready for {email}"
+
 		return {
 			"success": True,
-			"message": "Employee created successfully",
-			"data": doc.as_dict()
+			"message": message,
+			"data": _employee_dict(doc)
 		}
 	except frappe.ValidationError as e:
 		return {"success": False, "message": str(e)}
@@ -106,10 +159,20 @@ def update_employee(name, data):
 		doc.save()
 		frappe.db.commit()
 
+		message = "Employee updated successfully"
+		if data.get("password") and (data.get("email") or doc.email):
+			email = data.get("email") or doc.email
+			user = _ensure_login(email, data.get("password"), doc.full_name)
+			if not doc.user or data.get("email"):
+				doc.user = user
+				doc.save()
+				frappe.db.commit()
+			message = f"Employee updated. Login for {email} is ready"
+
 		return {
 			"success": True,
-			"message": "Employee updated successfully",
-			"data": doc.as_dict()
+			"message": message,
+			"data": _employee_dict(doc)
 		}
 	except frappe.ValidationError as e:
 		return {"success": False, "message": str(e)}

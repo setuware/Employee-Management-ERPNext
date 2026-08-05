@@ -115,6 +115,7 @@ function editEmployee(name) {
 				document.getElementById('employee-id').value = emp.employee_id || '';
 				document.getElementById('full-name').value = emp.full_name || '';
 				document.getElementById('email').value = emp.email || '';
+				document.getElementById('login-password').value = '';
 				document.getElementById('department').value = emp.department || '';
 				document.getElementById('joining-date').value = emp.joining_date || '';
 				document.getElementById('profile-picture').value = emp.profile_picture || '';
@@ -139,7 +140,8 @@ function saveEmployee(event) {
 		email: document.getElementById('email').value,
 		department: document.getElementById('department').value,
 		joining_date: document.getElementById('joining-date').value,
-		profile_picture: document.getElementById('profile-picture').value
+		profile_picture: document.getElementById('profile-picture').value,
+		password: document.getElementById('login-password').value
 	};
 	
 	const name = document.getElementById('employee-name').value;
